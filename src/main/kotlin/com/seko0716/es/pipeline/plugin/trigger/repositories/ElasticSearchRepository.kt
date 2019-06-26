@@ -19,6 +19,7 @@ class ElasticSearchRepository @Autowired constructor(val client: Client) {
         .get()
         .hits
         .hits
+        .asSequence()
         .map { mapSearchHit2MapWithId }
 
     fun findAllPipelineInfo() = client
@@ -28,5 +29,6 @@ class ElasticSearchRepository @Autowired constructor(val client: Client) {
         .get()
         .hits
         .hits
+        .asSequence()
         .map { mapSearchHit2MapWithId.invoke(it) }
 }
