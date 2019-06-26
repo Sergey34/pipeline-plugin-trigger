@@ -4,11 +4,7 @@ import org.springframework.util.StringUtils
 import java.io.Serializable
 import java.util.*
 
-class HostAndPort private constructor(
-    private val host: String,
-    private val port: Int,
-    private val hasBracketlessColons: Boolean
-) : Serializable {
+class HostAndPort private constructor(private val host: String, private val port: Int) : Serializable {
 
     fun hasPort(): Boolean {
         return this.port >= 0
@@ -27,28 +23,6 @@ class HostAndPort private constructor(
         return if (this.hasPort()) this.port else defaultPort
     }
 
-    fun withDefaultPort(defaultPort: Int): HostAndPort {
-        checkState(
-            isValidPort(
-                defaultPort
-            )
-        )
-        return if (this.hasPort()) this else HostAndPort(
-            this.host,
-            defaultPort,
-            this.hasBracketlessColons
-        )
-    }
-
-    fun requireBracketsForIPv6(): HostAndPort {
-        checkArgument(
-            !this.hasBracketlessColons,
-            "Possible bracketless IPv6 literal: %s",
-            this.host
-        )
-        return this
-    }
-
     override fun equals(other: Any?): Boolean {
         return if (this === other) {
             true
@@ -61,7 +35,7 @@ class HostAndPort private constructor(
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(this.host, this.port, this.hasBracketlessColons)
+        return Objects.hash(this.host, this.port)
     }
 
     override fun toString(): String {
@@ -102,8 +76,7 @@ class HostAndPort private constructor(
             )
             return HostAndPort(
                 parsedHost.host,
-                port,
-                parsedHost.hasBracketlessColons
+                port
             )
         }
 
@@ -168,7 +141,7 @@ class HostAndPort private constructor(
                 )
             }
 
-            return HostAndPort(host, port, hasBracketlessColons)
+            return HostAndPort(host, port)
         }
 
         private fun checkNotNull(value: String?) {
