@@ -23,10 +23,6 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.quartz-scheduler/quartz
-//    implementation("org.quartz-scheduler:quartz")
-
-
     implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
     implementation("org.springframework.boot:spring-boot-starter-quartz")
 //    implementation("org.springframework.boot:spring-boot-starter-security")

@@ -1,6 +1,6 @@
 package com.seko0716.es.pipeline.plugin.trigger.configurations.properties
 
-import com.seko0716.es.pipeline.plugin.trigger.services.HostAndPort
+import com.seko0716.es.pipeline.plugin.trigger.domains.HostAndPort
 import org.apache.http.HttpHost
 
 class ElasticsearchProperties {

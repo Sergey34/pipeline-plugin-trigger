@@ -1,4 +1,4 @@
-package com.seko0716.es.pipeline.plugin.trigger.services
+package com.seko0716.es.pipeline.plugin.trigger.domains
 
 import org.springframework.util.StringUtils
 import java.io.Serializable
@@ -28,12 +28,24 @@ class HostAndPort private constructor(
     }
 
     fun withDefaultPort(defaultPort: Int): HostAndPort {
-        checkState(isValidPort(defaultPort))
-        return if (this.hasPort()) this else HostAndPort(this.host, defaultPort, this.hasBracketlessColons)
+        checkState(
+            isValidPort(
+                defaultPort
+            )
+        )
+        return if (this.hasPort()) this else HostAndPort(
+            this.host,
+            defaultPort,
+            this.hasBracketlessColons
+        )
     }
 
     fun requireBracketsForIPv6(): HostAndPort {
-        checkArgument(!this.hasBracketlessColons, "Possible bracketless IPv6 literal: %s", this.host)
+        checkArgument(
+            !this.hasBracketlessColons,
+            "Possible bracketless IPv6 literal: %s",
+            this.host
+        )
         return this
     }
 
@@ -77,10 +89,22 @@ class HostAndPort private constructor(
         }
 
         fun fromParts(host: String, port: Int): HostAndPort {
-            checkArgument(isValidPort(port), "Port out of range: %s", port)
+            checkArgument(
+                isValidPort(
+                    port
+                ), "Port out of range: %s", port
+            )
             val parsedHost = fromString(host)
-            checkArgument(!parsedHost.hasPort(), "Host has a port: %s", host)
-            return HostAndPort(parsedHost.host, port, parsedHost.hasBracketlessColons)
+            checkArgument(
+                !parsedHost.hasPort(),
+                "Host has a port: %s",
+                host
+            )
+            return HostAndPort(
+                parsedHost.host,
+                port,
+                parsedHost.hasBracketlessColons
+            )
         }
 
         private fun checkArgument(state: Boolean, message: String, value: Any) {
@@ -91,7 +115,11 @@ class HostAndPort private constructor(
 
         fun fromHost(host: String): HostAndPort {
             val parsedHost = fromString(host)
-            checkArgument(!parsedHost.hasPort(), "Host has a port: %s", host)
+            checkArgument(
+                !parsedHost.hasPort(),
+                "Host has a port: %s",
+                host
+            )
             return parsedHost
         }
 
@@ -102,7 +130,10 @@ class HostAndPort private constructor(
             val host: String
             var port: Int
             if (hostPortString.startsWith("[")) {
-                val hostAndPort = getHostAndPortFromBracketedHost(hostPortString)
+                val hostAndPort =
+                    getHostAndPortFromBracketedHost(
+                        hostPortString
+                    )
                 host = hostAndPort[0]
                 portString = hostAndPort[1]
             } else {
@@ -118,7 +149,11 @@ class HostAndPort private constructor(
 
             port = -1
             if (!StringUtils.isEmpty(portString)) {
-                checkArgument(!portString!!.startsWith("+"), "Unparseable port number: %s", hostPortString)
+                checkArgument(
+                    !portString!!.startsWith(
+                        "+"
+                    ), "Unparseable port number: %s", hostPortString
+                )
 
                 try {
                     port = Integer.parseInt(portString)
@@ -126,7 +161,11 @@ class HostAndPort private constructor(
                     throw IllegalArgumentException("Unparseable port number: $hostPortString")
                 }
 
-                checkArgument(isValidPort(port), "Port number out of range: %s", hostPortString)
+                checkArgument(
+                    isValidPort(
+                        port
+                    ), "Port number out of range: %s", hostPortString
+                )
             }
 
             return HostAndPort(host, port, hasBracketlessColons)
@@ -160,7 +199,11 @@ class HostAndPort private constructor(
                 )
 
                 for (i in closeBracketIndex + 2 until hostPortString.length) {
-                    checkArgument(Character.isDigit(hostPortString[i]), "Port must be numeric: %s", hostPortString)
+                    checkArgument(
+                        Character.isDigit(
+                            hostPortString[i]
+                        ), "Port must be numeric: %s", hostPortString
+                    )
                 }
 
                 arrayOf(host, hostPortString.substring(closeBracketIndex + 2))
