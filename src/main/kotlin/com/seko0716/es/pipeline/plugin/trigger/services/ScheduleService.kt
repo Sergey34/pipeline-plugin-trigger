@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 @Service
 class ScheduleService @Autowired constructor(
     val repository: ElasticSearchRepository,
-    @Value("\${spring.application.group}") val group: String,
+    @Value("\${spring.application.schedule.group}") val group: String,
     val scheduler: Scheduler
 ) {
 

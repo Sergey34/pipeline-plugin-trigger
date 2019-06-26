@@ -1,5 +1,9 @@
 spring:
+  application:
+    schedule:
+      group: group_1
   data:
     elasticsearch:
+      protocol: http
       cluster-name: elasticseash
       cluster-nodes: "localhost:9200"
