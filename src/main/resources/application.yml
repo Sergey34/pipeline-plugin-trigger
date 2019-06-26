@@ -7,3 +7,11 @@ spring:
       protocol: http
       cluster-name: elasticseash
       cluster-nodes: "localhost:9200"
+  quartz:
+    auto-startup: true
+    job-store-type: memory
+    scheduler-name: pipeline-trigger
+    startup-delay: 5s
+    #    http://www.quartz-scheduler.org/documentation/quartz-2.1.7/configuration/
+    properties:
+      org.quartz.threadPool.threadCount: 5
