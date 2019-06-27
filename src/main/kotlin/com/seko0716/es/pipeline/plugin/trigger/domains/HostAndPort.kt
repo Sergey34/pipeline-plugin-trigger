@@ -19,6 +19,7 @@ class HostAndPort private constructor(private val host: String, private val port
         return this.host
     }
 
+    @Suppress("unused")
     fun getPortOrDefault(defaultPort: Int): Int {
         return if (this.hasPort()) this.port else defaultPort
     }
@@ -62,44 +63,15 @@ class HostAndPort private constructor(private val host: String, private val port
             }
         }
 
-        fun fromParts(host: String, port: Int): HostAndPort {
-            checkArgument(
-                isValidPort(
-                    port
-                ), "Port out of range: %s", port
-            )
-            val parsedHost = fromString(host)
-            checkArgument(
-                !parsedHost.hasPort(),
-                "Host has a port: %s",
-                host
-            )
-            return HostAndPort(
-                parsedHost.host,
-                port
-            )
-        }
-
         private fun checkArgument(state: Boolean, message: String, value: Any) {
             if (!state) {
                 throw IllegalStateException(String.format(message, value))
             }
         }
 
-        fun fromHost(host: String): HostAndPort {
-            val parsedHost = fromString(host)
-            checkArgument(
-                !parsedHost.hasPort(),
-                "Host has a port: %s",
-                host
-            )
-            return parsedHost
-        }
-
         fun fromString(hostPortString: String): HostAndPort {
             checkNotNull(hostPortString)
             var portString: String? = null
-            var hasBracketlessColons = false
             val host: String
             var port: Int
             if (hostPortString.startsWith("[")) {
@@ -113,7 +85,6 @@ class HostAndPort private constructor(private val host: String, private val port
                     portString = hostPortString.substring(port + 1)
                 } else {
                     host = hostPortString
-                    hasBracketlessColons = port >= 0
                 }
             }
 
