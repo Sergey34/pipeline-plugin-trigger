@@ -103,10 +103,7 @@ class HostAndPort private constructor(private val host: String, private val port
             val host: String
             var port: Int
             if (hostPortString.startsWith("[")) {
-                val hostAndPort =
-                    getHostAndPortFromBracketedHost(
-                        hostPortString
-                    )
+                val hostAndPort = getHostAndPortFromBracketedHost(hostPortString)
                 host = hostAndPort[0]
                 portString = hostAndPort[1]
             } else {
@@ -150,7 +147,7 @@ class HostAndPort private constructor(private val host: String, private val port
 
         private fun getHostAndPortFromBracketedHost(hostPortString: String): Array<String> {
             val colonIndex: Int = hostPortString.indexOf(':')
-            val closeBracketIndex: Int = hostPortString.lastIndexOf(':')
+            val closeBracketIndex: Int = hostPortString.lastIndexOf(':') - 1
             checkArgument(
                 hostPortString[0] == '[',
                 "Bracketed host-port string must start with a bracket: %s",

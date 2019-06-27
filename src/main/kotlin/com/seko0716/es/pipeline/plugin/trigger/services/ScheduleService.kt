@@ -1,6 +1,6 @@
 package com.seko0716.es.pipeline.plugin.trigger.services
 
-import com.seko0716.es.pipeline.plugin.trigger.repositories.ElasticSearchRepository
+import com.seko0716.es.pipeline.plugin.trigger.repositories.ElasticsearchRepository
 import com.seko0716.es.pipeline.plugin.trigger.services.jobs.RestJob
 import org.quartz.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ScheduleService @Autowired constructor(
-    val repository: ElasticSearchRepository,
+    val repository: ElasticsearchRepository,
     @Value("\${spring.application.schedule.group}") val group: String,
     val scheduler: Scheduler
 ) {
@@ -24,7 +24,7 @@ class ScheduleService @Autowired constructor(
 
     }
 
-    private fun buildTrigger(it: HashMap<String, Any>): CronTrigger? {
+    private fun buildTrigger(it: HashMap<String, Any>): CronTrigger {
         return TriggerBuilder
             .newTrigger()
             .withIdentity(it["title"] as String, group)

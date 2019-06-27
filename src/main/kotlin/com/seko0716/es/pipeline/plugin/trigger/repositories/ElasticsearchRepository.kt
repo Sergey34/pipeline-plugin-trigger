@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 
 @Repository
-class ElasticSearchRepository @Autowired constructor(val client: Client) {
+class ElasticsearchRepository @Autowired constructor(val client: Client) {
 
     val mapSearchHit2MapWithId =
         { searchHit: SearchHit -> HashMap(searchHit.sourceAsMap).apply { put("id", searchHit.id) } }
