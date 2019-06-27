@@ -43,6 +43,7 @@ class ElasticsearchRepository @Autowired constructor(
 
     fun findAllPipelineInfo(nodeId: Int, totalNodes: Int): List<Map<String, Any>> {
         val result = mutableListOf<Map<String, Any>>()
+
         var scrollResp = client
             .prepareSearch(INDEX)
             .setSize(SIZE)
@@ -52,11 +53,11 @@ class ElasticsearchRepository @Autowired constructor(
             .get()
 
         do {
-            scrollResp
+            result.addAll(scrollResp
                 .hits
                 .hits
-                .map { mapSearchHit2MapWithId.invoke(it) }
-                .toCollection(result)
+                .map { mapSearchHit2MapWithId.invoke(it) })
+
 
             scrollResp =
                 client.prepareSearchScroll(scrollResp.scrollId).setScroll(TimeValue(60000)).execute().actionGet()
