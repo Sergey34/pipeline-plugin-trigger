@@ -7,11 +7,16 @@ import org.elasticsearch.common.unit.TimeValue
 import org.elasticsearch.search.SearchHit
 import org.elasticsearch.search.slice.SliceBuilder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Repository
 
 
 @Repository
-class ElasticsearchRepository @Autowired constructor(val client: Client) {
+class ElasticsearchRepository @Autowired constructor(
+    val client: Client,
+    @Value("\${spring.application.pipeline.source.fields}")
+    val sourceFields: Array<String>
+) {
 
     val mapSearchHit2MapWithId =
         { searchHit: SearchHit -> HashMap(searchHit.sourceAsMap).apply { put("id", searchHit.id) } }
@@ -28,7 +33,7 @@ class ElasticsearchRepository @Autowired constructor(val client: Client) {
     fun findAllPipelineInfo() = client
         .prepareSearch(INDEX)
         .setSize(SIZE)
-        .setFetchSource(arrayOf("title", "description", "state", "trigger"), null)
+        .setFetchSource(sourceFields, null)
         .get()
         .hits
         .hits
@@ -43,7 +48,7 @@ class ElasticsearchRepository @Autowired constructor(val client: Client) {
             .setSize(SIZE)
             .setScroll(TimeValue(30000))
             .slice(SliceBuilder(nodeId, totalNodes))
-            .setFetchSource(arrayOf("title", "description", "state", "trigger"), null)
+            .setFetchSource(sourceFields, null)
             .get()
 
         do {

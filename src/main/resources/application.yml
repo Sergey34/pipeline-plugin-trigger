@@ -1,5 +1,13 @@
 spring:
   application:
+    pipeline:
+      source:
+        fields: >
+          title,
+          description,
+          state,
+          trigger
+
     schedule:
       group: group_1
   data:
@@ -15,3 +23,6 @@ spring:
     #    http://www.quartz-scheduler.org/documentation/quartz-2.1.7/configuration/
     properties:
       org.quartz.threadPool.threadCount: 5
+
+
+
