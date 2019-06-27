@@ -2,6 +2,7 @@ package com.seko0716.es.pipeline.plugin.trigger.services
 
 import com.seko0716.es.pipeline.plugin.trigger.repositories.ElasticsearchRepository
 import com.seko0716.es.pipeline.plugin.trigger.services.jobs.RestJob
+import com.seko0716.es.pipeline.plugin.trigger.services.node.NodeStateService
 import org.quartz.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -14,12 +15,13 @@ import org.springframework.stereotype.Service
 class ScheduleService @Autowired constructor(
     val repository: ElasticsearchRepository,
     @Value("\${spring.application.schedule.group}") val group: String,
-    val scheduler: Scheduler
+    val scheduler: Scheduler,
+    val nodeStateService: NodeStateService
 ) {
 
     @EventListener(ContextRefreshedEvent::class)
     fun initScheduling() {
-        repository.findAllPipelineInfo()
+        repository.findAllPipelineInfo(nodeStateService.getCurrentNodeId(), nodeStateService.getTotalNodes())
             .forEach { scheduler.scheduleJob(buildJobDetail(it), buildTrigger(it)) }
 
     }
