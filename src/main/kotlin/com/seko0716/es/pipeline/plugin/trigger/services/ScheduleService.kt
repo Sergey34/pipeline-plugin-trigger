@@ -24,7 +24,7 @@ class ScheduleService @Autowired constructor(
 
     }
 
-    private fun buildTrigger(it: HashMap<String, Any>): CronTrigger {
+    private fun buildTrigger(it: Map<String, Any>): CronTrigger {
         return TriggerBuilder
             .newTrigger()
             .withIdentity(it["title"] as String, group)
@@ -34,7 +34,7 @@ class ScheduleService @Autowired constructor(
             .build()
     }
 
-    private fun buildJobDetail(pipelineInfo: HashMap<String, Any>): JobDetail {
+    private fun buildJobDetail(pipelineInfo: Map<String, Any>): JobDetail {
         val jobDataMap = JobDataMap()
         jobDataMap["id"] = pipelineInfo["id"] as String
 
